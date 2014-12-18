@@ -14,15 +14,34 @@ namespace log4net.Rollbar
         private Configuration _configuration;
 
         public string AccessToken { get; set; }
+        public string Environment { get; set; }
+        public string Endpoint { get; set; }
+        public string Framework { get; set; }
+        public string GitSha { get; set; }
+        public string Language { get; set; }
+        public string Platform { get; set; }
+        public string ScrubParams { get; set; }
 
         public override void ActivateOptions()
         {
-            _configuration = new Configuration(AccessToken ?? GetConfigSetting("Rollbar.AccessToken"));
+            _configuration = new Configuration(GetConfigSetting(AccessToken, "Rollbar.AccessToken"))
+            {
+                Endpoint = GetConfigSetting(Endpoint, "Rollbar.Endpoint", _configuration.Endpoint),
+                Environment = GetConfigSetting(Environment, "Rollbar.Environment", _configuration.Environment),
+                Framework = GetConfigSetting(Framework, "Rolllbar.Framework", _configuration.Framework),
+                GitSha = GetConfigSetting(GitSha, "Rollbar.GitSha"),
+                Language = GetConfigSetting(Language, "Rollbar.CodeLanguage", _configuration.Language),
+                Platform = GetConfigSetting(Platform, "Rollbar.Platform", _configuration.Platform)
+            };
+
+            var scrubParams = GetConfigSetting(ScrubParams, "Rollbar.ScrubParams");
+            _configuration.ScrubParams = scrubParams == null ?
+                Configuration.DefaultScrubParams : scrubParams.Split(',');
         }
 
-        private static string GetConfigSetting(string name)
+        private static string GetConfigSetting(string param, string name, string fallback = null)
         {
-            return ConfigurationManager.AppSettings[name];
+            return param ?? ConfigurationManager.AppSettings[name] ?? fallback;
         }
 
         /// <summary>
