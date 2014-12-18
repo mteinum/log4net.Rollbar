@@ -1,0 +1,1 @@
+copy *.nupkg c:\NuGetRepository\
