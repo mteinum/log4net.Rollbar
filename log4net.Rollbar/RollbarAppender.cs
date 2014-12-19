@@ -24,15 +24,14 @@ namespace log4net.Rollbar
 
         public override void ActivateOptions()
         {
-            _configuration = new Configuration(GetConfigSetting(AccessToken, "Rollbar.AccessToken"))
-            {
-                Endpoint = GetConfigSetting(Endpoint, "Rollbar.Endpoint", _configuration.Endpoint),
-                Environment = GetConfigSetting(Environment, "Rollbar.Environment", _configuration.Environment),
-                Framework = GetConfigSetting(Framework, "Rolllbar.Framework", _configuration.Framework),
-                GitSha = GetConfigSetting(GitSha, "Rollbar.GitSha"),
-                Language = GetConfigSetting(Language, "Rollbar.CodeLanguage", _configuration.Language),
-                Platform = GetConfigSetting(Platform, "Rollbar.Platform", _configuration.Platform)
-            };
+            _configuration = new Configuration(GetConfigSetting(AccessToken, "Rollbar.AccessToken"));
+
+            _configuration.Endpoint = GetConfigSetting(Endpoint, "Rollbar.Endpoint", _configuration.Endpoint);
+            _configuration.Environment = GetConfigSetting(Environment, "Rollbar.Environment", _configuration.Environment);
+            _configuration.Framework = GetConfigSetting(Framework, "Rolllbar.Framework", _configuration.Framework);
+            _configuration.GitSha = GetConfigSetting(GitSha, "Rollbar.GitSha");
+            _configuration.Language = GetConfigSetting(Language, "Rollbar.CodeLanguage", _configuration.Language);
+            _configuration.Platform = GetConfigSetting(Platform, "Rollbar.Platform", _configuration.Platform);
 
             var scrubParams = GetConfigSetting(ScrubParams, "Rollbar.ScrubParams");
             _configuration.ScrubParams = scrubParams == null ?
