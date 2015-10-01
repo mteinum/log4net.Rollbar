@@ -20,7 +20,7 @@ You must add the appender to your log4net section in app or web.config
 
 ```xml
 <log4net>
-  <appender name="RollbarAppender" type="log4net.RollbarAppender, log4net.Rollbar">
+  <appender name="RollbarAppender" type="log4net.Rollbar.RollbarAppender, log4net.Rollbar">
     <param name="AccessToken" value="..." />
   </appender>
   <root>
