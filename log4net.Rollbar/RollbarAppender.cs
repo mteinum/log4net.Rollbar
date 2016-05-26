@@ -6,6 +6,7 @@ using log4net.Core;
 using RollbarSharp;
 using RollbarSharp.Serialization;
 using Configuration = RollbarSharp.Configuration;
+using System.Threading.Tasks;
 
 namespace log4net.Rollbar
 {
@@ -21,6 +22,16 @@ namespace log4net.Rollbar
         public string Language { get; set; }
         public string Platform { get; set; }
         public string ScrubParams { get; set; }
+
+        /// <summary>
+        /// Send log events to Rollbar asynchronously
+        /// </summary>
+        public bool Asynchronous { get; set; }
+
+        public RollbarAppender()
+        {
+            Asynchronous = true;
+        }
 
         public override void ActivateOptions()
         {
@@ -51,25 +62,31 @@ namespace log4net.Rollbar
         {
             var client = new RollbarClient(_configuration);
 
+            Task task = null;
             if (loggingEvent.Level >= Level.Critical)
             {
-                Send(loggingEvent, client.SendCriticalMessage, client.SendCriticalException);
+                task = Send(loggingEvent, client.SendCriticalMessage, client.SendCriticalException);
             }
             else if (loggingEvent.Level >= Level.Error)
             {
-                Send(loggingEvent, client.SendErrorMessage, client.SendErrorException);
+                task = Send(loggingEvent, client.SendErrorMessage, client.SendErrorException);
             }
             else if (loggingEvent.Level >= Level.Warn)
             {
-                Send(loggingEvent, client.SendWarningMessage, client.SendWarningException);
+                task = Send(loggingEvent, client.SendWarningMessage, client.SendWarningException);
             }
             else if (loggingEvent.Level >= Level.Info)
             {
-                client.SendInfoMessage(loggingEvent.RenderedMessage);
+                task = client.SendInfoMessage(loggingEvent.RenderedMessage);
             }
             else if (loggingEvent.Level >= Level.Debug)
             {
-                client.SendDebugMessage(loggingEvent.RenderedMessage);
+                task = client.SendDebugMessage(loggingEvent.RenderedMessage);
+            }
+
+            if (task != null && !Asynchronous)
+            {
+                task.Wait(TimeSpan.FromSeconds(5));
             }
         }
 
@@ -79,18 +96,18 @@ namespace log4net.Rollbar
         /// <param name="loggingEvent"></param>
         /// <param name="sendMessage"></param>
         /// <param name="sendException"></param>
-        private void Send(
+        private Task Send(
             LoggingEvent loggingEvent,
-            Action<string, IDictionary<string, object>, Action<DataModel>> sendMessage,
-            Action<Exception, string, Action<DataModel>> sendException)
+            Func<string, IDictionary<string, object>, Action<DataModel>, string, Task> sendMessage,
+            Func<Exception, string, Action<DataModel>, string, Task> sendException)
         {
             if (loggingEvent.ExceptionObject == null)
             {
-                sendMessage(loggingEvent.RenderedMessage, null, null);
+                return sendMessage(loggingEvent.RenderedMessage, null, null, null);
             }
             else
             {
-                sendException(loggingEvent.ExceptionObject, null, null);
+                return sendException(loggingEvent.ExceptionObject, null, null, null);
             }
         }
     }
