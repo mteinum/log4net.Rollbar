@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Morten Teinum")]
 [assembly: AssemblyProduct("log4net.Rollbar")]
-[assembly: AssemblyCopyright("Copyright ©  2014 Morten Teinum")]
+[assembly: AssemblyCopyright("Copyright ©  2017 Morten Teinum")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -35,4 +35,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0")]
 [assembly: AssemblyFileVersion("1.0.0")]
 
-[assembly: AssemblyInformationalVersion("1.0.5.0")]
+[assembly: AssemblyInformationalVersion("1.1.0")]

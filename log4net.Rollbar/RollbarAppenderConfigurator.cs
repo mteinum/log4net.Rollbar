@@ -14,10 +14,7 @@ namespace log4net.Rollbar
         {
             var appender = new RollbarAppender { AccessToken = accessToken };
 
-            if (configureAppender != null)
-            {
-                configureAppender(appender);
-            }
+            configureAppender?.Invoke(appender);
 
             appender.ActivateOptions();
 
