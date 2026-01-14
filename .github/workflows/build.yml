@@ -50,5 +50,14 @@ jobs:
     
     - name: Publish to NuGet
       if: startsWith(github.ref, 'refs/tags/v')
-      run: dotnet nuget push ./artifacts/log4net.Rollbar.*.nupkg --api-key ${{ steps.nuget-login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+      shell: pwsh
+      run: |
+        $package = Get-ChildItem ./artifacts/log4net.Rollbar.*.nupkg | Select-Object -First 1
+        if ($package) {
+          Write-Host "Publishing $($package.Name)..."
+          dotnet nuget push $package.FullName --api-key ${{ steps.nuget-login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        } else {
+          Write-Error "No package found matching ./artifacts/log4net.Rollbar.*.nupkg"
+          exit 1
+        }
 
