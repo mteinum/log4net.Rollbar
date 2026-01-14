@@ -1,5 +1,7 @@
 # log4net.Rollbar
 
+[![Build](https://github.com/mteinum/log4net.Rollbar/actions/workflows/build.yml/badge.svg)](https://github.com/mteinum/log4net.Rollbar/actions/workflows/build.yml)
+
 RollbarAppender is a custom log4net appender for reporting events to Rollbar. This package depends on the RollbarSharp package.
 
 https://rollbar.com
