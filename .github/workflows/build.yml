@@ -43,5 +43,9 @@ jobs:
     
     - name: Publish to NuGet
       if: startsWith(github.ref, 'refs/tags/v')
-      run: dotnet nuget push ./artifacts/*.nupkg --source https://api.nuget.org/v3/index.json --skip-duplicate
+      shell: pwsh
+      run: |
+        Get-ChildItem ./artifacts/*.nupkg | ForEach-Object {
+          dotnet nuget push $_.FullName --source https://api.nuget.org/v3/index.json --skip-duplicate
+        }
 
