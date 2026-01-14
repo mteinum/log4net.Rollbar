@@ -11,7 +11,6 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    environment: production
     permissions:
       id-token: write
       contents: read
@@ -42,12 +41,14 @@ jobs:
         name: nuget-packages
         path: ./artifacts/*.nupkg
     
+    - name: NuGet login (OIDC → temp API key)
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: NuGet/login@v1
+      id: nuget-login
+      with:
+        user: mteinum
+    
     - name: Publish to NuGet
       if: startsWith(github.ref, 'refs/tags/v')
-      shell: pwsh
-      run: |
-        Get-ChildItem ./artifacts/log4net.Rollbar.*.nupkg -Exclude *.Sample.* | ForEach-Object {
-          Write-Host "Publishing $($_.Name)..."
-          dotnet nuget push $_.FullName --source https://api.nuget.org/v3/index.json --skip-duplicate
-        }
+      run: dotnet nuget push ./artifacts/log4net.Rollbar.*.nupkg --api-key ${{ steps.nuget-login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
 
