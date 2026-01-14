@@ -96,7 +96,7 @@ namespace log4net.Rollbar
         /// <param name="loggingEvent"></param>
         /// <param name="sendMessage"></param>
         /// <param name="sendException"></param>
-        private Task Send(
+        private static Task Send(
             LoggingEvent loggingEvent,
             Func<string, IDictionary<string, object>, Action<DataModel>, string, Task> sendMessage,
             Func<Exception, string, Action<DataModel>, string, Task> sendException)

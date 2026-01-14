@@ -1,16 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net45</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <RootNamespace>log4net.Rollbar</RootNamespace>
     <AssemblyName>log4net.Rollbar</AssemblyName>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <LangVersion>latest</LangVersion>
+    
+    <!-- Assembly metadata -->
+    <Title>log4net.Rollbar</Title>
+    <Description>RollbarSharp log4net appender.</Description>
+    <Company>Morten Teinum</Company>
+    <Product>log4net.Rollbar</Product>
+    <Copyright>Copyright © 2017 Morten Teinum</Copyright>
+    <Version>1.2.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="log4net" Version="2.0.7" />
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="log4net" Version="3.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="RollbarSharp" Version="1.0.0.0" />
   </ItemGroup>
 
