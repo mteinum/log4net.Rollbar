@@ -24,6 +24,9 @@ jobs:
     - name: Build
       run: dotnet build log4net.Rollbar.sln --configuration Release --no-restore
     
+    - name: Test
+      run: dotnet test log4net.Rollbar.sln --configuration Release --no-build --verbosity normal
+    
     - name: Create NuGet package
       run: dotnet pack log4net.Rollbar.sln --configuration Release --no-build --output ./artifacts
     
